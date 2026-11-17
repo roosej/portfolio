@@ -1358,3 +1358,54 @@ footer {
 @media (hover: none) {
     .stat-item:hover, .testimonial:hover { transform: none; }
 }
+
+/* Playground page */
+.playground-intro { padding-top: 10rem; padding-bottom: 2rem; }
+.playground-grid-section { padding-top: 2rem; position: relative; z-index: 1; }
+.playground-grid { display: grid; gap: 3rem; }
+.play-card {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 3rem;
+    align-items: center;
+    border: 1px solid var(--dark-gray);
+    padding: 2rem;
+    transition: border-color 0.3s ease;
+}
+.play-card:hover { border-color: var(--white); }
+.play-preview {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--near-black);
+}
+.play-preview iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 200%;
+    height: 200%;
+    border: 0;
+    transform: scale(0.5);
+    transform-origin: 0 0;
+    pointer-events: none;
+}
+.playground-note {
+    margin-top: 3rem;
+    text-align: center;
+    color: var(--mid-gray);
+    letter-spacing: 2px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+}
+.nav-links a[aria-current="page"]::after { width: 100%; }
+.logo { display: block; }
+
+@media (max-width: 1024px) {
+    .play-card { grid-template-columns: 1fr; gap: 2rem; }
+}
+@media (max-width: 768px) {
+    .playground-intro { padding-top: 7rem; }
+    .play-card { padding: 1.25rem; }
+    .play-preview { background: var(--near-black) linear-gradient(135deg, #04030c, #1b2a6b); }
+}
