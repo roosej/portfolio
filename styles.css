@@ -59,7 +59,7 @@ body::before {
     left: 0;
     width: 100%;
     height: 300vh;
-    transition: transform 0.1s ease-out;
+    will-change: transform;
 }
 
 .circle-1 {
@@ -504,6 +504,7 @@ nav.scrolled {
 /* Hero Section */
 .hero {
     height: 100vh;
+    height: 100svh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1335,4 +1336,25 @@ footer {
 /* Restore full hover transitions once GSAP reveal finishes */
 .revealed {
     transition: all 0.3s ease;
+}
+
+/* Mobile polish */
+@media (max-width: 768px) {
+    .hero-content { padding: 0 1.5rem; }
+    .hero-canvas { opacity: 0.8; }
+    .hero::after { right: 50%; }
+    .cta-button { padding: 1rem 2.25rem; }
+    .hero-title { letter-spacing: -1px; }
+    .section-header { margin-bottom: 2.5rem; }
+    .skill-category, .testimonial, .stat-item { padding: 2rem 1.5rem; }
+    .project-image { min-height: 0; }
+}
+
+@media (max-width: 380px) {
+    .hero-title { font-size: 2.1rem; }
+    section { padding: 3.5rem 1.25rem; }
+}
+
+@media (hover: none) {
+    .stat-item:hover, .testimonial:hover { transform: none; }
 }
