@@ -29,7 +29,7 @@ canvas.className = 'hero-canvas';
 hero.prepend(canvas);
 
 const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, window.innerWidth < 768 ? 1.5 : 2));
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
 camera.position.z = 6;
@@ -52,7 +52,8 @@ const inner = new THREE.LineSegments(
 group.add(inner);
 
 // Particle shell
-const COUNT = 900;
+const isMobile = window.matchMedia('(max-width: 768px)').matches;
+const COUNT = isMobile ? 350 : 900;
 const pos = new Float32Array(COUNT * 3);
 for (let i = 0; i < COUNT; i++) {
     const r = 2.6 + Math.random() * 2.4;
@@ -78,13 +79,19 @@ function resize() {
     camera.updateProjectionMatrix();
     // shift shape right on wide screens so the title stays clear
     group.position.x = w > 900 ? 2.4 : 0;
-    group.scale.setScalar(w > 900 ? 1 : 0.8);
+    group.scale.setScalar(w > 900 ? 1 : w > 600 ? 0.8 : 0.5);
 }
+let lastW = 0;
 resize();
-window.addEventListener('resize', resize);
+lastW = window.innerWidth;
+// ignore height-only resizes (mobile address bar show/hide)
+window.addEventListener('resize', () => {
+    if (window.innerWidth !== lastW) { lastW = window.innerWidth; resize(); }
+});
 
 const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
 window.addEventListener('pointermove', (e) => {
+    if (e.pointerType === 'touch') return;
     mouse.tx = (e.clientX / window.innerWidth - 0.5) * 2;
     mouse.ty = (e.clientY / window.innerHeight - 0.5) * 2;
 });
@@ -200,6 +207,7 @@ if (!reduceMotion) {
 
     // magnetic CTA
     const cta = document.querySelector('.cta-button');
+    if (window.matchMedia('(hover: hover)').matches) {
     const xTo = gsap.quickTo(cta, 'x', { duration: 0.4, ease: 'power3' });
     const yTo = gsap.quickTo(cta, 'y', { duration: 0.4, ease: 'power3' });
     cta.addEventListener('pointermove', (e) => {
@@ -208,4 +216,5 @@ if (!reduceMotion) {
         yTo((e.clientY - r.top - r.height / 2) * 0.35);
     });
     cta.addEventListener('pointerleave', () => { xTo(0); yTo(0); });
+    }
 }

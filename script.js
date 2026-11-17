@@ -3,11 +3,16 @@
         let ticking = false;
 
         function updateParallax() {
-            const scrolled = window.pageYOffset;
-            const parallaxOffset = scrolled * 0.3; // 30% of scroll speed
-            parallaxLayer.style.transform = `translateY(${parallaxOffset}px)`;
+            // Spread the shape layer across the whole page: at the top we see its
+            // top edge, at the bottom of the page we see its bottom edge.
+            const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+            const travel = Math.max(0, parallaxLayer.offsetHeight - window.innerHeight);
+            const progress = Math.min(1, Math.max(0, window.pageYOffset / maxScroll));
+            parallaxLayer.style.transform = `translate3d(0, ${-progress * travel}px, 0)`;
             ticking = false;
         }
+        window.addEventListener('resize', updateParallax);
+        window.addEventListener('load', updateParallax);
 
         window.addEventListener('scroll', () => {
             if (!ticking) {
