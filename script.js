@@ -97,35 +97,40 @@
             observer.observe(el);
         });
 
-        // Blog modal
+        // Blog modal (only on pages that have it)
         const blogModal = document.getElementById('blog-modal');
-        const modalDate = document.getElementById('modal-date');
-        const modalTitle = document.getElementById('modal-title');
-        const modalBody = document.getElementById('modal-body');
-
-        document.querySelectorAll('.read-more').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                modalDate.textContent = this.dataset.date;
-                modalTitle.textContent = this.dataset.title;
-                modalBody.innerHTML = this.dataset.content;
-                blogModal.classList.add('open');
-                document.body.style.overflow = 'hidden';
-            });
-        });
-
-        document.querySelector('.blog-modal-close').addEventListener('click', closeBlogModal);
-
-        blogModal.addEventListener('click', function(e) {
-            if (e.target === blogModal) closeBlogModal();
-        });
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeNavMenu();
-            if (e.key === 'Escape') closeBlogModal();
-        });
 
         function closeBlogModal() {
+            if (!blogModal) return;
             blogModal.classList.remove('open');
             document.body.style.overflow = '';
         }
+
+        if (blogModal) {
+            const modalDate = document.getElementById('modal-date');
+            const modalTitle = document.getElementById('modal-title');
+            const modalBody = document.getElementById('modal-body');
+
+            document.querySelectorAll('.read-more').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    modalDate.textContent = this.dataset.date;
+                    modalTitle.textContent = this.dataset.title;
+                    modalBody.innerHTML = this.dataset.content;
+                    blogModal.classList.add('open');
+                    document.body.style.overflow = 'hidden';
+                });
+            });
+
+            document.querySelector('.blog-modal-close').addEventListener('click', closeBlogModal);
+            blogModal.addEventListener('click', function(e) {
+                if (e.target === blogModal) closeBlogModal();
+            });
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeNavMenu();
+                closeBlogModal();
+            }
+        });
